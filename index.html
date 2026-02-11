@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Sekolah Luminous</title>
+    
+    <!-- Font Modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icon Pack -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4facfe;
+            --secondary: #00f2fe;
+            --accent: #ffd700; /* Emas */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-blur: blur(20px);
+            --text-color: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+
+        body {
+            background: linear-gradient(to top, #09203f 0%, #537895 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND ELEMENTS --- */
+        .moon-container {
+            position: fixed; top: 50px; right: 10%; z-index: 0;
+            animation: floatMoon 8s ease-in-out infinite alternate;
+        }
+        .moon {
+            width: 120px; height: 120px;
+            background: radial-gradient(circle at 30% 30%, #fff, #fdf4dc);
+            border-radius: 50%;
+            box-shadow: 0 0 40px #fff, 0 0 80px #ffd700, 0 0 120px #4facfe;
+            position: relative;
+        }
+        .cloud {
+            position: fixed; background: rgba(255, 255, 255, 0.15); border-radius: 50px;
+            z-index: 0; filter: blur(5px); animation: drift 60s linear infinite;
+        }
+        .c1 { width: 180px; height: 50px; top: 15%; left: -100px; }
+        .c2 { width: 250px; height: 70px; top: 40%; right: -150px; animation-duration: 80s; }
+
+        /* WADAH UTAMA */
+        .app-container {
+            width: 100%; max-width: 420px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 35px; border: 1px solid var(--glass-border);
+            backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            overflow: hidden; position: relative; z-index: 2; padding-bottom: 60px;
+        }
+
+        /* HEADER */
+        .header { text-align: center; padding: 40px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent); }
+        .school-logo {
+            width: 90px; height: 90px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.5);
+            object-fit: cover; background: #fff; box-shadow: 0 0 30px rgba(79, 172, 254, 0.6); animation: pulse 3s infinite;
+        }
+        .header h2 { font-size: 1.6rem; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.2); line-height: 1.2; margin-top: 15px;}
+        .header p { font-size: 0.9rem; opacity: 0.9; margin-top: 5px; font-weight: 300; }
+
+        /* CONTENT */
+        .content { padding: 0 25px; }
+
+        /* Sapaan */
+        .greeting-box {
+            background: rgba(255,255,255,0.2); padding: 15px 20px; border-radius: 20px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .greet-text h3 { font-size: 1.2rem; font-weight: 700; color: #fff; }
+        .greet-text p { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+        .greet-icon { font-size: 1.8rem; color: var(--accent); }
+
+        /* Kepsek Card */
+        .kepsek-card {
+            display: flex; gap: 15px; align-items: flex-start;
+            background: rgba(0,0,0,0.2); padding: 20px; border-radius: 20px;
+            margin-bottom: 25px; border-left: 4px solid var(--accent);
+        }
+        .kepsek-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; flex-shrink: 0; }
+        .kepsek-info p { font-size: 0.85rem; font-style: italic; opacity: 0.95; line-height: 1.5; margin-bottom: 8px; white-space: pre-wrap; }
+        .kepsek-info span { font-size: 0.8rem; font-weight: 700; color: var(--accent); display: block;}
+
+        /* Jurnal Ramadan */
+        .jurnal-btn {
+            display: block; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 4px; border-radius: 25px; text-decoration: none; margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3); transition: transform 0.2s;
+        }
+        .jurnal-btn:active { transform: scale(0.98); }
+        .jurnal-inner {
+            background: rgba(255,255,255,0.9); color: #d35400; padding: 15px 20px;
+            border-radius: 22px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .j-left { display: flex; align-items: center; gap: 15px; }
+        .j-icon { font-size: 1.5rem; color: #d35400; }
+        .j-text h4 { font-size: 1rem; font-weight: 800; margin-bottom: 2px; }
+        .j-text p { font-size: 0.75rem; color: #666; font-weight: 600; }
+
+        /* Menu Grid */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .menu-item {
+            background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.2);
+            padding: 20px 15px; border-radius: 20px; text-align: center; text-decoration: none; color: white; transition: all 0.3s;
+            cursor: pointer;
+        }
+        .menu-item:hover { background: rgba(255,255,255,0.25); transform: translateY(-5px); border-color: #fff; }
+        .m-icon {
+            width: 45px; height: 45px; margin: 0 auto 10px; background: rgba(255,255,255,0.2);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .ic-siswa { color: #4facfe; background: #e0f7fa; }
+        .ic-guru { color: #a8ff78; background: #e8f5e9; }
+        .ic-play { color: #ff6b6b; background: #ffebee; }
+        .menu-item span { font-size: 0.85rem; font-weight: 600; }
+
+        /* Video */
+        #video-container { display: none; margin-bottom: 25px; border-radius: 15px; overflow: hidden; border: 2px solid rgba(255,255,255,0.3); background: #000; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* Footer */
+        .footer { text-align: center; padding: 20px; font-size: 0.75rem; color: rgba(255,255,255,0.7); border-top: 1px solid rgba(255,255,255,0.1); }
+        .socials { margin-top: 10px; }
+        .socials a { color: #fff; margin: 0 10px; font-size: 1.2rem; transition: 0.3s; }
+        .socials a:hover { color: var(--accent); }
+
+        /* Settings Button */
+        .settings-btn {
+            position: absolute; top: 20px; right: 20px; width: 40px; height: 40px;
+            background: rgba(0,0,0,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: #fff; cursor: pointer; z-index: 10; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s;
+        }
+        .settings-btn:hover { background: var(--accent); color: #000; transform: rotate(90deg); }
+
+        /* --- MODAL UMUM --- */
+        .modal {
+            display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: #fff; color: #333; width: 90%; max-width: 400px;
+            border-radius: 20px; padding: 25px; max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); animation: slideUp 0.3s ease;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .modal-header h3 { color: #333; font-weight: 800; margin: 0; }
+        .close-modal { font-size: 1.5rem; cursor: pointer; color: #999; }
+        
+        /* --- CLASS SELECTION GRID (DALAM MODAL) --- */
+        .class-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .class-card {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; border-radius: 15px; text-decoration: none; color: white;
+            transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .class-card:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+        .class-card i { font-size: 1.5rem; margin-bottom: 8px; }
+        .class-card span { font-weight: 700; font-size: 1rem; }
+        
+        /* Warna-warni Kelas */
+        .bg-1 { background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%); }
+        .bg-2 { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+        .bg-3 { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
+        .bg-4 { background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%); }
+        .bg-5 { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); }
+        .bg-6 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+
+        /* Form Styling */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #555; margin-bottom: 5px; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem; font-family: inherit;
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-section-title { font-size: 0.9rem; color: #4facfe; font-weight: 800; margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .btn-save { width: 100%; background: #4facfe; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; font-size: 1rem; }
+        .btn-reset { width: 100%; background: transparent; color: #e74c3c; border: 1px solid #e74c3c; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+
+        @keyframes floatMoon { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
+        @keyframes drift { from { transform: translateX(-100px); } to { transform: translateX(100vw); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <!-- BACKGROUND -->
+    <div class="moon-container"><div class="moon"></div></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div>
+
+    <div class="app-container">
+        <!-- SETTINGS BUTTON -->
+        <div class="settings-btn" onclick="openSettings()"><i class="fas fa-cog"></i></div>
+
+        <!-- HEADER -->
+        <div class="header">
+            <!-- DEFAULT CONTENT DIISI AGAR TIDAK BLANK SAAT LOADING -->
+            <img id="view-logo" src="https://img.freepik.com/free-vector/school-badge-logo-design-vector_53876-136369.jpg" alt="Logo" class="school-logo">
+            <h2 id="view-nama-sekolah">SD NEGERI CONTOH 01</h2>
+            <p id="view-tagline">Cerdas, Berkarakter & Digital</p>
+        </div>
+
+        <div class="content">
+            <!-- SAPAAN -->
+            <div class="greeting-box">
+                <div class="greet-text"><h3 id="waktu-sapa">Halo,</h3><p>Selamat Datang di Portal!</p></div>
+                <div class="greet-icon"><i class="fas fa-school"></i></div>
+            </div>
+
+            <!-- KEPSEK -->
+            <div class="kepsek-card">
+                <img id="view-foto-kepsek" src="https://img.freepik.com/free-photo/senior-man-face-portrait-wearing-bowler-hat_53876-148154.jpg" alt="Kepsek" class="kepsek-img">
+                <div class="kepsek-info">
+                    <p id="view-quote">"Pendidikan adalah senjata paling ampuh untuk mengubah dunia."</p>
+                    <span id="view-nama-kepsek">- Kepala Sekolah</span>
+                </div>
+            </div>
+
+            <!-- VIDEO AREA -->
+            <div id="video-container">
+                <div class="video-wrapper"><iframe id="view-video" src="" title="Video Tutorial" frameborder="0" allowfullscreen></iframe></div>
+            </div>
+
+            <!-- APP CANVA (RAMADAN) -->
+            <a id="view-link-canva" href="https://www.canva.com/" target="_blank" class="jurnal-btn">
+                <div class="jurnal-inner">
+                    <div class="j-left">
+                        <i class="fas fa-star-and-crescent j-icon"></i>
+                        <div class="j-text"><h4>e-Jurnal Ramadan</h4><p>Isi kegiatan ibadahmu</p></div>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color:#d35400"></i>
+                </div>
+            </a>
+
+            <!-- MENU UTAMA -->
+            <div class="menu-grid">
+                <!-- Portal Siswa & Ortu (TRIGGERS MODAL) -->
+                <div class="menu-item" onclick="openClassModal()">
+                    <div class="m-icon ic-siswa"><i class="fas fa-users" style="color:#0288d1"></i></div>
+                    <span>Portal Kelas</span>
+                </div>
+                
+                <!-- Guru -->
+                <a id="view-link-guru" href="#" class="menu-item" target="_blank">
+                    <div class="m-icon ic-guru"><i class="fas fa-chalkboard-teacher" style="color:#2e7d32"></i></div>
+                    <span>Area Guru</span>
+                </a>
+
+                <!-- Tutorial Toggle -->
+                <div class="menu-item" onclick="toggleVideo(event)">
+                    <div class="m-icon ic-play"><i class="fas fa-play" style="color:#d32f2f"></i></div>
+                    <span>Tutorial</span>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer">
+                <p id="view-footer-text">Jl. Pendidikan No. 123 | © 2024 SD Negeri Contoh</p>
+                <div class="socials">
+                    <a id="view-link-ig" href="#"><i class="fab fa-instagram"></i></a>
+                    <a id="view-link-fb" href="#"><i class="fab fa-facebook"></i></a>
+                    <a id="view-link-yt" href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PILIH KELAS (Pop-up Indah) -->
+    <div id="classModal" class="modal">
+        <div class="modal-content" style="background: rgba(255,255,255,0.95);">
+            <div class="modal-header">
+                <h3 style="color:#333;">🎓 Pilih Kelas Ananda</h3>
+                <span class="close-modal" onclick="closeClassModal()">&times;</span>
+            </div>
+            <div class="class-grid">
+                <a id="btn-k1" href="#" target="_blank" class="class-card bg-1"><i class="fas fa-shapes"></i><span>Kelas 1</span></a>
+                <a id="btn-k2" href="#" target="_blank" class="class-card bg-2"><i class="fas fa-palette"></i><span>Kelas 2</span></a>
+                <a id="btn-k3" href="#" target="_blank" class="class-card bg-3"><i class="fas fa-book-open"></i><span>Kelas 3</span></a>
+                <a id="btn-k4" href="#" target="_blank" class="class-card bg-4"><i class="fas fa-microscope"></i><span>Kelas 4</span></a>
+                <a id="btn-k5" href="#" target="_blank" class="class-card bg-5"><i class="fas fa-globe-asia"></i><span>Kelas 5</span></a>
+                <a id="btn-k6" href="#" target="_blank" class="class-card bg-6"><i class="fas fa-graduation-cap"></i><span>Kelas 6</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SETTINGS (FORM PENGATURAN) -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚙️ Pengaturan Portal</h3>
+                <span class="close-modal" onclick="closeSettings()">&times;</span>
+            </div>
+            
+            <form id="configForm" onsubmit="saveSettings(event)">
+                <div class="form-section-title">Identitas Sekolah</div>
+                <div class="form-group"><label>Nama Sekolah</label><input type="text" id="input-nama-sekolah"></div>
+                <div class="form-group"><label>Tagline</label><input type="text" id="input-tagline"></div>
+                <div class="form-group"><label>URL Logo</label><input type="text" id="input-logo"></div>
+
+                <div class="form-section-title">Kepala Sekolah</div>
+                <div class="form-group"><label>Nama</label><input type="text" id="input-nama-kepsek"></div>
+                <div class="form-group"><label>URL Foto</label><input type="text" id="input-foto-kepsek"></div>
+                <div class="form-group"><label>Sambutan</label><textarea id="input-quote-kepsek"></textarea></div>
+
+                <div class="form-section-title">Link Per Kelas</div>
+                <div class="form-group"><label>Link Kelas 1</label><input type="text" id="input-link-k1" placeholder="https://..."></div>
+                <div class="form-group"><label>Link Kelas 2</label><input type="text" id="input-link-k2" placeholder="https://..."></div>
+                <div class="form-group"><label>Link Kelas 3</label><input type="text" id="input-link-k3" placeholder="https://..."></div>
+                <div class="form-group"><label>Link Kelas 4</label><input type="text" id="input-link-k4" placeholder="https://..."></div>
+                <div class="form-group"><label>Link Kelas 5</label><input type="text" id="input-link-k5" placeholder="https://..."></div>
+                <div class="form-group"><label>Link Kelas 6</label><input type="text" id="input-link-k6" placeholder="https://..."></div>
+
+                <div class="form-section-title">Link Lainnya</div>
+                <div class="form-group"><label>Link Google Sheet Guru</label><input type="text" id="input-link-guru"></div>
+                <div class="form-group"><label>Link App Canva (Ramadan)</label><input type="text" id="input-link-canva"></div>
+                <div class="form-group"><label>ID Video Youtube</label><input type="text" id="input-video-id"></div>
+                <div class="form-group"><label>Footer</label><input type="text" id="input-footer"></div>
+
+                <button type="submit" class="btn-save">Simpan Perubahan</button>
+                <button type="button" class="btn-reset" onclick="resetSettings()">Reset Default</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- LOGIKA SISTEM (JAVASCRIPT) -->
+    <script>
+        // Data Default
+        const defaultConfig = {
+            namaSekolah: "SD NEGERI CONTOH 01",
+            tagline: "Membangun Generasi Emas & Berakhlak",
+            logoUrl: "https://img.freepik.com/free-vector/school-badge-logo-design-vector_53876-136369.jpg",
+            
+            // Link Kelas
+            linkK1: "#", linkK2: "#", linkK3: "#", linkK4: "#", linkK5: "#", linkK6: "#",
+            
+            linkGuru: "#",
+            linkCanva: "https://www.canva.com/",
+            
+            namaKepsek: "Drs. Budi Santoso, M.Pd",
+            fotoKepsek: "https://img.freepik.com/free-photo/senior-man-face-portrait-wearing-bowler-hat_53876-148154.jpg",
+            quoteKepsek: "\"Mari jadikan teknologi sebagai jembatan ilmu dan amal.\"",
+            
+            videoId: "dQw4w9WgXcQ",
+            footerText: "Jl. Pendidikan No. 123 | © 2024 Tim IT Sekolah",
+            linkIg: "#", linkFb: "#", linkYt: "#"
+        };
+
+        // Pastikan HTML selesai loading baru jalankan script
+        document.addEventListener("DOMContentLoaded", () => {
+            try {
+                // Coba load setting dari storage
+                loadSettings();
+            } catch (e) {
+                console.log("Gagal load storage, menggunakan default HTML.");
+            }
+            setupGreeting();
+        });
+
+        function loadSettings() {
+            let config = defaultConfig;
+            try {
+                const savedData = localStorage.getItem("portalConfig");
+                if (savedData) config = JSON.parse(savedData);
+            } catch (e) {
+                console.log("LocalStorage restricted.");
+            }
+
+            // Update DOM
+            const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
+            const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; };
+            const setHref = (id, href) => { const el = document.getElementById(id); if(el) el.href = href; };
+
+            setTxt("view-nama-sekolah", config.namaSekolah);
+            setTxt("view-tagline", config.tagline);
+            setSrc("view-logo", config.logoUrl);
+            
+            setHref("btn-k1", config.linkK1);
+            setHref("btn-k2", config.linkK2);
+            setHref("btn-k3", config.linkK3);
+            setHref("btn-k4", config.linkK4);
+            setHref("btn-k5", config.linkK5);
+            setHref("btn-k6", config.linkK6);
+
+            setHref("view-link-guru", config.linkGuru);
+            setHref("view-link-canva", config.linkCanva);
+
+            setSrc("view-foto-kepsek", config.fotoKepsek);
+            setTxt("view-nama-kepsek", "- " + config.namaKepsek);
+            setTxt("view-quote", config.quoteKepsek);
+
+            setSrc("view-video", `https://www.youtube.com/embed/${config.videoId}`);
+            setTxt("view-footer-text", config.footerText);
+        }
+
+        function openSettings() {
+            const modal = document.getElementById("settingsModal");
+            modal.style.display = "flex";
+            
+            let config = defaultConfig;
+            try {
+                const savedData = localStorage.getItem("portalConfig");
+                if (savedData) config = JSON.parse(savedData);
+            } catch (e) {}
+
+            document.getElementById("input-nama-sekolah").value = config.namaSekolah;
+            document.getElementById("input-tagline").value = config.tagline;
+            document.getElementById("input-logo").value = config.logoUrl;
+            
+            document.getElementById("input-nama-kepsek").value = config.namaKepsek;
+            document.getElementById("input-foto-kepsek").value = config.fotoKepsek;
+            document.getElementById("input-quote-kepsek").value = config.quoteKepsek;
+
+            document.getElementById("input-link-k1").value = config.linkK1;
+            document.getElementById("input-link-k2").value = config.linkK2;
+            document.getElementById("input-link-k3").value = config.linkK3;
+            document.getElementById("input-link-k4").value = config.linkK4;
+            document.getElementById("input-link-k5").value = config.linkK5;
+            document.getElementById("input-link-k6").value = config.linkK6;
+
+            document.getElementById("input-link-guru").value = config.linkGuru;
+            document.getElementById("input-link-canva").value = config.linkCanva;
+            document.getElementById("input-video-id").value = config.videoId;
+            document.getElementById("input-footer").value = config.footerText;
+        }
+
+        function closeSettings() { document.getElementById("settingsModal").style.display = "none"; }
+
+        function saveSettings(e) {
+            e.preventDefault();
+            const newConfig = {
+                ...defaultConfig,
+                namaSekolah: document.getElementById("input-nama-sekolah").value,
+                tagline: document.getElementById("input-tagline").value,
+                logoUrl: document.getElementById("input-logo").value,
+                namaKepsek: document.getElementById("input-nama-kepsek").value,
+                fotoKepsek: document.getElementById("input-foto-kepsek").value,
+                quoteKepsek: document.getElementById("input-quote-kepsek").value,
+                
+                linkK1: document.getElementById("input-link-k1").value,
+                linkK2: document.getElementById("input-link-k2").value,
+                linkK3: document.getElementById("input-link-k3").value,
+                linkK4: document.getElementById("input-link-k4").value,
+                linkK5: document.getElementById("input-link-k5").value,
+                linkK6: document.getElementById("input-link-k6").value,
+
+                linkGuru: document.getElementById("input-link-guru").value,
+                linkCanva: document.getElementById("input-link-canva").value,
+                videoId: document.getElementById("input-video-id").value,
+                footerText: document.getElementById("input-footer").value
+            };
+            
+            try {
+                localStorage.setItem("portalConfig", JSON.stringify(newConfig));
+                loadSettings();
+                closeSettings();
+                alert("✅ Pengaturan Berhasil Disimpan!");
+            } catch (e) {
+                alert("Maaf, penyimpanan otomatis tidak didukung di browser ini. Tapi tampilan akan berubah sementara.");
+                loadSettings();
+                closeSettings();
+            }
+        }
+
+        function resetSettings() {
+            if(confirm("Reset pengaturan ke awal?")) {
+                try { localStorage.removeItem("portalConfig"); } catch(e) {}
+                loadSettings();
+                closeSettings();
+            }
+        }
+
+        function openClassModal() { document.getElementById("classModal").style.display = "flex"; }
+        function closeClassModal() { document.getElementById("classModal").style.display = "none"; }
+
+        function setupGreeting() {
+            const jam = new Date().getHours();
+            const text = document.getElementById("waktu-sapa");
+            if (jam < 11) text.innerText = "Selamat Pagi ☀️";
+            else if (jam < 15) text.innerText = "Selamat Siang 🌤️";
+            else if (jam < 18) text.innerText = "Selamat Sore 🌅";
+            else text.innerText = "Selamat Malam 🌙";
+        }
+
+        function toggleVideo(e) {
+            e.preventDefault();
+            const vid = document.getElementById("video-container");
+            vid.style.display = (vid.style.display === "block") ? "none" : "block";
+            if(vid.style.display === "block") vid.scrollIntoView({behavior: "smooth"});
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("settingsModal")) closeSettings();
+            if (event.target == document.getElementById("classModal")) closeClassModal();
+        }
+    </script>
+</body>
+</html>
