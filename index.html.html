@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Sekolah Digital - Official</title>
+    
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4facfe;
+            --secondary: #00f2fe;
+            --accent: #ffd700;
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-blur: blur(15px);
+            --text-color: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #09203f 0%, #537895 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        /* --- CONTAINER UTAMA (RESPONSIVE) --- */
+        .app-container {
+            width: 100%;
+            max-width: 450px; /* Default: Mobile */
+            background: var(--glass-bg);
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 5;
+            overflow: hidden;
+            transition: max-width 0.4s ease;
+        }
+
+        /* Tablet Breakpoint */
+        @media (min-width: 768px) {
+            .app-container { max-width: 680px; }
+            .menu-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+
+        /* Desktop Breakpoint */
+        @media (min-width: 1024px) {
+            .app-container { 
+                max-width: 950px; 
+                display: flex; 
+                flex-direction: row;
+                height: 85vh;
+            }
+            .sidebar {
+                width: 35%;
+                background: rgba(0,0,0,0.15);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                border-right: 1px solid var(--glass-border);
+            }
+            .main-content {
+                width: 65%;
+                overflow-y: auto;
+                padding: 40px !important;
+            }
+            .header { padding: 40px 20px !important; }
+            .footer { grid-column: span 2; }
+        }
+
+        /* --- SECTIONS --- */
+        .header { text-align: center; padding: 35px 20px 15px; }
+        .school-logo {
+            width: 85px; height: 85px; border-radius: 50%; border: 3px solid #fff;
+            object-fit: cover; background: #fff; margin-bottom: 15px;
+        }
+        .header h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; }
+        .header p { font-size: 0.85rem; opacity: 0.8; margin-top: 5px; }
+
+        .main-content { padding: 0 20px 20px; }
+
+        /* GREETING */
+        .greet-card {
+            background: rgba(255,255,255,0.1); padding: 15px 20px; border-radius: 20px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+            border: 1px solid var(--glass-border);
+        }
+        .greet-card h3 { font-size: 1.1rem; }
+        .greet-card p { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+
+        /* KEPSEK CARD */
+        .kepsek-card {
+            display: flex; gap: 15px; align-items: center;
+            background: rgba(0,0,0,0.25); padding: 18px; border-radius: 20px;
+            margin-bottom: 20px; border-left: 5px solid var(--accent);
+        }
+        .kepsek-img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; }
+        .kepsek-info p { font-size: 0.85rem; font-style: italic; line-height: 1.4; margin-bottom: 5px; }
+        .kepsek-info span { font-size: 0.75rem; font-weight: 800; color: var(--accent); display: block; }
+
+        /* RAMADAN BUTTON */
+        .btn-ramadan {
+            display: block; background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+            padding: 3px; border-radius: 20px; text-decoration: none; margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .btn-ramadan:hover { transform: scale(1.02); }
+        .ramadan-inner {
+            background: #fff; color: #d35400; padding: 12px 20px;
+            border-radius: 17px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .ramadan-inner h4 { font-size: 0.95rem; font-weight: 800; }
+        .ramadan-inner p { font-size: 0.7rem; color: #777; }
+
+        /* MENU GRID */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .menu-item {
+            background: rgba(255,255,255,0.08); border: 1px solid var(--glass-border);
+            padding: 20px 10px; border-radius: 20px; text-align: center; text-decoration: none;
+            color: #fff; transition: all 0.3s ease; cursor: pointer;
+        }
+        .menu-item:hover { background: rgba(255,255,255,0.2); transform: translateY(-5px); }
+        .m-icon {
+            width: 42px; height: 42px; margin: 0 auto 10px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+        }
+
+        /* VIDEO */
+        #video-box { display: none; margin-bottom: 20px; border-radius: 15px; overflow: hidden; background: #000; border: 2px solid var(--glass-border); }
+        .video-ratio { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-ratio iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* FOOTER */
+        .footer { text-align: center; padding: 20px; font-size: 0.7rem; opacity: 0.6; border-top: 1px solid var(--glass-border); width: 100%; }
+
+        /* SETTINGS ICON */
+        .settings-trigger {
+            position: absolute; top: 15px; right: 15px; width: 35px; height: 35px;
+            background: rgba(0,0,0,0.2); border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; color: #fff; cursor: pointer; z-index: 100;
+        }
+
+        /* MODALS */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1000;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-box {
+            background: #fff; color: #333; width: 100%; max-width: 450px;
+            border-radius: 25px; padding: 25px; position: relative; animation: pop 0.3s ease;
+        }
+        @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 0.75rem; font-weight: 800; color: #666; margin-bottom: 4px; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 0.9rem;
+        }
+        .btn-save { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+
+        /* CLASS GRID */
+        .class-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .class-btn {
+            padding: 15px; border-radius: 15px; text-decoration: none; color: #fff; text-align: center;
+            font-weight: 700; display: flex; flex-direction: column; align-items: center;
+        }
+        .class-btn i { font-size: 1.4rem; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Pengaturan -->
+        <div class="settings-trigger" onclick="askPassword()"><i class="fas fa-cog"></i></div>
+
+        <!-- Sidebar / Header -->
+        <div class="sidebar">
+            <div class="header">
+                <img id="v-logo" src="https://img.freepik.com/free-vector/school-badge-logo-design-vector_53876-136369.jpg" class="school-logo">
+                <h2 id="v-nama">SDN CONTOH DIGITAL</h2>
+                <p id="v-tagline">Cerdas, Kreatif, & Berkarakter</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="greet-card">
+                <div><h3>Halo,</h3><p id="v-tgl">Selamat Datang di Portal!</p></div>
+                <i class="fas fa-star" style="color:var(--accent); font-size:1.5rem"></i>
+            </div>
+
+            <div class="kepsek-card">
+                <img id="v-foto-kepsek" src="https://img.freepik.com/free-photo/senior-man-face-portrait-wearing-bowler-hat_53876-148154.jpg" class="kepsek-img">
+                <div class="kepsek-info">
+                    <p id="v-quote">"Pendidikan bukan persiapan untuk hidup; pendidikan adalah hidup itu sendiri."</p>
+                    <span id="v-nama-kepsek">- Nama Kepala Sekolah</span>
+                </div>
+            </div>
+
+            <div id="video-box">
+                <div class="video-ratio"><iframe id="v-video" src="" frameborder="0" allowfullscreen></iframe></div>
+            </div>
+
+            <a id="v-link-ramadan" href="#" target="_blank" class="btn-ramadan">
+                <div class="ramadan-inner">
+                    <div><h4>e-Jurnal Ramadan</h4><p>Klik untuk mulai mengisi ibadah</p></div>
+                    <i class="fas fa-moon"></i>
+                </div>
+            </a>
+
+            <div class="menu-grid">
+                <div class="menu-item" onclick="openModal('classModal')">
+                    <div class="m-icon" style="background:#e3f2fd; color:#1e88e5"><i class="fas fa-users"></i></div>
+                    <span>Portal Kelas</span>
+                </div>
+                <a id="v-link-guru" href="#" target="_blank" class="menu-item">
+                    <div class="m-icon" style="background:#e8f5e9; color:#43a047"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <span>Data Guru</span>
+                </a>
+                <div class="menu-item" onclick="toggleVideo()">
+                    <div class="m-icon" style="background:#fce4ec; color:#d81b60"><i class="fas fa-play"></i></div>
+                    <span>Tutorial</span>
+                </div>
+                <a href="#" class="menu-item">
+                    <div class="m-icon" style="background:#fff9c4; color:#fbc02d"><i class="fas fa-info-circle"></i></div>
+                    <span>Info Sekolah</span>
+                </a>
+            </div>
+            
+            <div class="footer">
+                <p id="v-footer">© 2024 SD Negeri Contoh | Inovasi Tiada Henti</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: LOGIN -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 style="margin-bottom:15px">Akses Admin</h3>
+            <div class="form-group">
+                <label>PASSWORD PENGATURAN</label>
+                <input type="password" id="pass-input" placeholder="Ketik password...">
+            </div>
+            <button class="btn-save" onclick="loginAdmin()">Masuk Sekarang</button>
+            <p onclick="closeModal('loginModal')" style="text-align:center; font-size:0.8rem; margin-top:10px; cursor:pointer; color:#999">Batal</p>
+        </div>
+    </div>
+
+    <!-- MODAL: KELAS -->
+    <div id="classModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 style="margin-bottom:20px">Pilih Kelas Ananda</h3>
+            <div class="class-grid">
+                <a id="l-k1" href="#" target="_blank" class="class-btn" style="background:#ff7675"><i class="fas fa-1"></i>Kelas 1</a>
+                <a id="l-k2" href="#" target="_blank" class="class-btn" style="background:#74b9ff"><i class="fas fa-2"></i>Kelas 2</a>
+                <a id="l-k3" href="#" target="_blank" class="class-btn" style="background:#55efc4"><i class="fas fa-3"></i>Kelas 3</a>
+                <a id="l-k4" href="#" target="_blank" class="class-btn" style="background:#fab1a0"><i class="fas fa-4"></i>Kelas 4</a>
+                <a id="l-k5" href="#" target="_blank" class="class-btn" style="background:#a29bfe"><i class="fas fa-5"></i>Kelas 5</a>
+                <a id="l-k6" href="#" target="_blank" class="class-btn" style="background:#fdcb6e"><i class="fas fa-6"></i>Kelas 6</a>
+            </div>
+            <button class="btn-save" onclick="closeModal('classModal')" style="background:#eee; color:#333; margin-top:20px">Tutup</button>
+        </div>
+    </div>
+
+    <!-- MODAL: SETTINGS -->
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-box" style="max-height:85vh; overflow-y:auto;">
+            <h3 style="margin-bottom:15px">⚙️ Pengaturan</h3>
+            
+            <div class="form-group">
+                <label style="color:var(--primary)">KUSTOMISASI PASSWORD</label>
+                <input type="text" id="i-pass" placeholder="Password Baru">
+            </div>
+            <hr style="margin:15px 0; opacity:0.2">
+            
+            <div class="form-group"><label>Nama Sekolah</label><input type="text" id="i-nama"></div>
+            <div class="form-group"><label>Tagline</label><input type="text" id="i-tagline"></div>
+            <div class="form-group"><label>ID Video YouTube</label><input type="text" id="i-video"></div>
+            <div class="form-group"><label>Link Ramadan</label><input type="text" id="i-ramadan"></div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+                <div class="form-group"><label>Link Kls 1</label><input type="text" id="i-k1"></div>
+                <div class="form-group"><label>Link Kls 2</label><input type="text" id="i-k2"></div>
+                <div class="form-group"><label>Link Kls 3</label><input type="text" id="i-k3"></div>
+                <div class="form-group"><label>Link Kls 4</label><input type="text" id="i-k4"></div>
+                <div class="form-group"><label>Link Kls 5</label><input type="text" id="i-k5"></div>
+                <div class="form-group"><label>Link Kls 6</label><input type="text" id="i-k6"></div>
+            </div>
+
+            <button class="btn-save" onclick="simpanData()">Simpan & Refresh</button>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULTS = {
+            pass: "admin123",
+            nama: "SD NEGERI DIGITAL 01",
+            tagline: "Unggul dalam IPTEK & IMTAK",
+            video: "dQw4w9WgXcQ",
+            ramadan: "https://canva.com",
+            guru: "#",
+            k1: "#", k2: "#", k3: "#", k4: "#", k5: "#", k6: "#",
+            footer: "© 2024 Portal Pendidikan Digital",
+            kepsek: "Drs. Budi Santoso",
+            quote: "Pendidikan adalah senjata paling ampuh untuk mengubah dunia.",
+            foto: "https://img.freepik.com/free-photo/senior-man-face-portrait-wearing-bowler-hat_53876-148154.jpg"
+        };
+
+        let config = { ...DEFAULTS };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const saved = localStorage.getItem("portal_vfinal");
+            if (saved) config = JSON.parse(saved);
+            updateUI();
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById("v-tgl").innerText = new Date().toLocaleDateString('id-ID', options);
+        });
+
+        function updateUI() {
+            document.getElementById("v-nama").innerText = config.nama;
+            document.getElementById("v-tagline").innerText = config.tagline;
+            document.getElementById("v-video").src = `https://www.youtube.com/embed/${config.video}`;
+            document.getElementById("v-link-ramadan").href = config.ramadan;
+            document.getElementById("v-nama-kepsek").innerText = "- " + config.kepsek;
+            document.getElementById("v-quote").innerText = `"${config.quote}"`;
+            document.getElementById("v-footer").innerText = config.footer;
+            
+            for(let i=1; i<=6; i++) {
+                document.getElementById(`l-k${i}`).href = config[`k${i}`];
+            }
+        }
+
+        function askPassword() {
+            openModal('loginModal');
+            document.getElementById("pass-input").value = "";
+        }
+
+        function loginAdmin() {
+            if (document.getElementById("pass-input").value === config.pass) {
+                closeModal('loginModal');
+                openSettings();
+            } else {
+                alert("❌ Password Salah!");
+            }
+        }
+
+        function openSettings() {
+            openModal('settingsModal');
+            document.getElementById("i-pass").value = config.pass;
+            document.getElementById("i-nama").value = config.nama;
+            document.getElementById("i-tagline").value = config.tagline;
+            document.getElementById("i-video").value = config.video;
+            document.getElementById("i-ramadan").value = config.ramadan;
+            for(let i=1; i<=6; i++) document.getElementById(`i-k${i}`).value = config[`k${i}`];
+        }
+
+        function simpanData() {
+            config.pass = document.getElementById("i-pass").value || DEFAULTS.pass;
+            config.nama = document.getElementById("i-nama").value;
+            config.tagline = document.getElementById("i-tagline").value;
+            config.video = document.getElementById("i-video").value;
+            config.ramadan = document.getElementById("i-ramadan").value;
+            for(let i=1; i<=6; i++) config[`k${i}`] = document.getElementById(`i-k${i}`).value;
+
+            localStorage.setItem("portal_vfinal", JSON.stringify(config));
+            updateUI();
+            closeModal('settingsModal');
+            alert("✅ Berhasil Disimpan!");
+        }
+
+        function toggleVideo() {
+            const b = document.getElementById("video-box");
+            b.style.display = (b.style.display === "block") ? "none" : "block";
+            if(b.style.display === "block") b.scrollIntoView({behavior: "smooth"});
+        }
+
+        function openModal(id) { document.getElementById(id).style.display = "flex"; }
+        function closeModal(id) { document.getElementById(id).style.display = "none"; }
+    </script>
+</body>
+</html>
